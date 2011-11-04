@@ -2,34 +2,29 @@ function get_current_time(){
 	var time = new Date();
 	var hours = time.getHours();
 	var minutes = time.getMinutes();
-	if (minutes < 10){
-		minutes = "0" + minutes
-	}
-	if (hours == 0) {
-		return '12:' + minutes + 'am';
-	}
-	if (hours < 12) {
-		return hours + ':' + minutes + 'am';
-	} else {
-		return (hours - 12) + ':' + minutes + 'pm';
-	}
+	var ampm = 'am';
+	if (hours > 11) { ampm = 'pm'; }
+	if (minutes < 10) { minutes = "0" + minutes; }
+	if (hours == 0) { hours = 12; }
+	if (hours > 12) { hours = hours - 12; }
+	return hours + ':' + minutes + ampm;
 }
 
 var EvantaChat = {
 	
-	init: function(){
+	init: function(ws_host){
 		if (typeof WebSocket === 'undefined') {
 	    	alert("Your browser does not support websockets.")
 			return false;
 	    }
-		EvantaChat.init_websocket();
+		EvantaChat.init_websocket(ws_host);
 		$('#chatroom').hide();
 		EvantaChat.wait_for_join();
 		EvantaChat.wait_for_chat_submit();
 	},
 	
-	init_websocket: function(){
-		var ws =  new WebSocket('ws://10.116.100.86:8100'); //andrew's computer
+	init_websocket: function(ws_host){
+		var ws =  new WebSocket(ws_host);
 		ws.onopen = function(){};
 		ws.onclose = function(){
 			EvantaChat.display_status('You have been disconnected');
@@ -100,7 +95,3 @@ var EvantaChat = {
 		EvantaChat.ws.send(JSON.stringify(json));
 	}
 };
-
-$(document).ready(function(){
-	EvantaChat.init();
-});

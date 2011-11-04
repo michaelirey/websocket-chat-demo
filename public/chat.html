@@ -5,6 +5,11 @@
 	<link rel="stylesheet" href="styles.css">
     <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js'></script>
 	<script src='javascript.js'></script>
+	<script>
+		$(document).ready(function(){
+			EvantaChat.init('ws://localhost:8100');
+		});
+	</script>
   </head>
   <body>
 	<div id="wrapper">
