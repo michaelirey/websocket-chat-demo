@@ -18,14 +18,24 @@ class ChatMessage
     @type == 'join'
   end
   
+  def name_change?
+    /^\/nick .*/
+  end
+  
+  def new_username
+    @message.gsub(/^\/nick/, '')
+  end
+  
   def to_s
     if is_join?
       return {:type => 'status', :message => "#{@username} has joined the chatroom"}.to_json
+    elsif name_change?
+      return {:type => 'status', :message => "#{@username} is now known as #{new_username}"}.to_json
     else
-      case @message
-      when /^\/nick .*/
-        return {:type => 'status', :message => "#{@username} is now known as someone else"}.to_json
-      else
+      # case @message
+      #       when /^\/nick .*/
+      #         return {:type => 'status', :message => "#{@username} is now known as #{new_username}"}.to_json
+      #       else
         return {:type => 'message', :username => @username, :message => @message}.to_json
       end
     end
@@ -54,6 +64,9 @@ EventMachine.run do
         message = ChatMessage.new(msg_json, Time.now)
         if (message.is_join?)
           @subscribers[subscriber_id] = message.username
+        end
+        if (message.name_change?)
+          @subscribers[subscriber_id] = message.new_username
         end
         @main_channel.push message.to_s
       end

@@ -36,7 +36,6 @@ var EvantaChat = {
 		};
 		ws.onmessage = function(evt){
 			var data = JSON.parse(evt.data);
-			console.log(data);
 			EvantaChat.message_received(data.type, data.username, data.message);
 		};
 		EvantaChat.ws = ws;
