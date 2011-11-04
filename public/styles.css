@@ -1,0 +1,44 @@
+body {
+	background-color: #aaa;
+}
+
+#wrapper {
+	width: 500px;
+	margin: 50px auto;
+	text-align: center;
+}
+
+#wrapper header {
+	font-size: 90%;
+}
+
+.debug {
+	text-align: center;
+	color: #999;
+}
+
+#pick_a_username {
+	background: #fff;
+	padding: 5px 10px 10px;
+}
+
+#chatroom {
+	text-align: left;
+	background: #fff;
+	padding: 5px 10px 10px;
+}
+
+#messages {
+	margin-bottom: 10px;
+	height: 300px;
+	overflow: auto;
+}
+
+#messages time {
+	float: right;
+	color: #999;
+}
+
+#keyboard {
+	width: 100%;
+}
