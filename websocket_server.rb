@@ -7,11 +7,13 @@ class ChatMessage
   
   attr_accessor :type, :username, :message
   
-  def initialize(msg_json, time_received)
+  def initialize(msg_json, subscribers, subscriber_id)
     msg = JSON.parse(msg_json)
     @type = msg['type']
     @username = msg['username']
     @message = msg['message']
+    @subscribers = subscribers
+    @subscriber_id = subscriber_id
   end
   
   def is_join?
@@ -19,7 +21,11 @@ class ChatMessage
   end
   
   def new_username
-    @message.gsub(/^\/nick/, '')
+    @username = @message.gsub(/^\/nick/, '')
+    
+    @subscribers[@subscriber_id] = @username
+    
+    return @username
   end
   
   def to_s
@@ -30,7 +36,7 @@ class ChatMessage
       when /^\/nick .*/
         return {:type => 'status', :message => "#{@username} is now known as #{new_username}"}.to_json
       else
-        return {:type => 'message', :username => @username, :message => @message}.to_json
+        return {:type => 'message', :username => @username, :message => "<strong>#{@subscribers[@subscriber_id]}</strong>: #{@message}"}.to_json
       end
     end
   end
@@ -55,10 +61,15 @@ EventMachine.run do
       end
     
       ws.onmessage do |msg_json|
-        message = ChatMessage.new(msg_json, Time.now)
+
+
+        
+        message = ChatMessage.new(msg_json, @subscribers, subscriber_id)
+
         if (message.is_join?)
           @subscribers[subscriber_id] = message.username
         end
+
         # not working yet
         # if (message.name_change?)
         #   @subscribers[subscriber_id] = message.new_username

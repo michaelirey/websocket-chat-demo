@@ -3,7 +3,7 @@ body {
 }
 
 #wrapper {
-	width: 500px;
+	width: 800px;
 	margin: 50px auto;
 	text-align: center;
 }
@@ -41,4 +41,11 @@ body {
 
 #keyboard {
 	width: 100%;
+}
+
+#members {
+	margin-bottom: 10px;
+	height: 300px;
+	width: 100px;	
+	overflow: auto;
 }
